@@ -1,0 +1,12 @@
+{
+  "name": "nodejs-color-display",
+  "version": "1.0.0",
+  "description": "Simple Node.js app (Express) that displays colors on a web page",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Color Display</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main>
+    <h1>Color Gallery</h1>
+    <div id="controls">
+      <input id="search" placeholder="Filter by name (e.g. red)" />
+      <select id="sort">
+        <option value="name">Sort by name</option>
+        <option value="hue">Sort by hue</option>
+      </select>
+    </div>
+
+    <div id="palette" aria-live="polite"></div>
+  </main>
+
+  <script>
+    async function fetchColors() {
+      const res = await fetch('/api/colors');
+      const data = await res.json();
+      return data;
+    }
+
+    function hexToRgb(hex) {
+      hex = hex.replace('#', '');
+      if (hex.length === 3) hex = hex.split('').map(h => h + h).join('');
+      const bigint = parseInt(hex, 16);
+      return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+    }
+
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+      if (max === min) { h = s = 0; }
+      else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch(max){
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+      }
+      return [h * 360, s, l];
+    }
+
+    function createSwatch(color) {
+      const sw = document.createElement('div');
+      sw.className = 'swatch';
+      sw.innerHTML = `
+        <div class="sample" style="background:${color.hex}"></div>
+        <div class="meta">
+          <div class="name">${color.name}</div>
+          <div class="hex">${color.hex}</div>
+        </div>
+      `;
+      sw.addEventListener('click', () => {
+        navigator.clipboard?.writeText(color.hex).then(()=>{
+          sw.classList.add('copied');
+          setTimeout(()=> sw.classList.remove('copied'), 900);
+        });
+      });
+      return sw;
+    }
+
+    function renderPalette(list) {
+      const palette = document.getElementById('palette');
+      palette.innerHTML = '';
+      if (list.length === 0) palette.textContent = 'No colors match.';
+      list.forEach(c => palette.appendChild(createSwatch(c)));
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      let colors = await fetchColors();
+      colors = colors.map(c => ({...c, _hsl: rgbToHsl(...hexToRgb(c.hex))}));
+
+      const search = document.getElementById('search');
+      const sort = document.getElementById('sort');
+
+      function applyFilters() {
+        const q = search.value.trim().toLowerCase();
+        let filtered = colors.filter(c => c.name.toLowerCase().includes(q) || c.hex.toLowerCase().includes(q));
+        if (sort.value === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
+        else filtered.sort((a,b) => a._hsl[0] - b._hsl[0]);
+        renderPalette(filtered);
+      }
+
+      search.addEventListener('input', applyFilters);
+      sort.addEventListener('change', applyFilters);
+      applyFilters();
+    });
+  </script>
+</body>
+</html>

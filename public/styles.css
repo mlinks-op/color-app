@@ -1,0 +1,15 @@
+* { box-sizing: border-box; }
+body { font-family: Inter, system-ui, Arial; margin: 0; padding: 32px; background: #f7f7fb; color: #111; }
+main { max-width: 980px; margin: 0 auto; }
+h1 { margin: 0 0 18px 0; font-size: 28px; }
+#controls { display:flex; gap:12px; margin-bottom:16px; }
+#search, #sort { padding:8px 12px; border-radius:8px; border:1px solid #ddd; }
+#search { flex:1; }
+#palette { display:grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap:12px; }
+.swatch { border-radius:12px; overflow:hidden; box-shadow: 0 6px 18px rgba(20,20,50,0.06); cursor:pointer; transition: transform .12s ease; }
+.swatch:active { transform: translateY(1px); }
+.sample { height:110px; }
+.meta { padding:10px; background:#fff; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.name { font-size:14px; font-weight:600; }
+.hex { font-family: monospace; font-size:13px; color:#666; }
+.swatch.copied { outline:3px solid rgba(0,0,0,0.06); }
