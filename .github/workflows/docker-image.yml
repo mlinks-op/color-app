@@ -51,8 +51,6 @@ jobs:
 
           
     # push to mimikube
-      - name: Checkout
-        uses: actions/checkout@v4
 
       - name: Setup Kubectl
         uses: azure/setup-kubectl@v3
@@ -64,6 +62,5 @@ jobs:
 
       - name: Deploy to Minikube
         run: |
-          cd color-app/
           kubectl apply -f color.yaml/
           kubectl rollout status deployment/myapp
