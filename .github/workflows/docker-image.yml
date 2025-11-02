@@ -64,5 +64,6 @@ jobs:
 
       - name: Deploy to Minikube
         run: |
+          cd color-app/
           kubectl apply -f color.yaml/
           kubectl rollout status deployment/myapp
