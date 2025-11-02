@@ -47,4 +47,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/color-app:${{github_run.id}}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/color-app:${{github.run_id}}
