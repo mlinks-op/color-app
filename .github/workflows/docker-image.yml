@@ -82,4 +82,4 @@ jobs:
       - name: Deploy to AKS
         run: |
           kubectl apply -f color.yaml
-          kubectl rollout status deployment/nodeapp
+          kubectl rollout status deployment/color-deployment
