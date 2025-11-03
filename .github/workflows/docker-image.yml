@@ -81,5 +81,5 @@ jobs:
       # Step 4: Deploy to AKS using kubectl
       - name: Deploy to AKS
         run: |
-          kubectl apply -f color-app/color.yaml
+          kubectl apply -f color.yaml
           kubectl rollout status deployment/nodeapp
