@@ -76,7 +76,7 @@ jobs:
       # Step 3: Update the image tag in your manifest (optional)
       - name: Update image in manifest
         run: |
-          sed -i "s|image: .*|image: ${{ secrets.DOCKERHUB_USERNAME }}/color-app:${{ github.run_id }}|" color-app/color.yaml
+          sed -i "s|image: .*|image: ${{ secrets.DOCKERHUB_USERNAME }}/color-app:${{ github.run_id }}|" color.yaml
 
       # Step 4: Deploy to AKS using kubectl
       - name: Deploy to AKS
